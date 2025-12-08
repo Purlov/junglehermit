@@ -73,54 +73,72 @@ normal_font = pygame.font.Font(None, 32)
 gladiator_text = normal_font.render("THE Gladiator", True, pygame.Color(0, 0, 0, a=140), None)
 gladiator_text_width, gladiator_text_height = gladiator_text.get_size()
 
-def save_game(number):
-    print(str(number))
+saving_text = normal_font.render("Saving the Game", True, pygame.Color(255, 165, 0, a=140), None)
+saving_text_w, saving_text_h = saving_text.get_size()
 
-save_game_objects = []
-for i in range(15):
-    if i < 5:
-        save_game_objects.append(tp.Button("Save to Slot "+str(i)))
-        save_game_objects[len(save_game_objects)-1].at_unclick=partial(save_game, i)
-
-def change_window():
-    main_group = tp.Box(save_game_objects)
-    updater = main_group.get_updater()
-    '''for i in range(len(all_windows)):
-        for j in range(len(all_windows[i])):
-            all_windows[i][j].unblit()'''
-    
-def save_game_pressed():
+def change_window(name):
     global updater
-    main_group = tp.Box(save_game_objects)
-    main_group.sort_children(gap=20)
-    main_group.center_on(screen)
+    global leaf 
+    leaf = name
+    if leaf == "main_menu":
+        main_menu_objects = []
+        main_menu_objects.append(tp.Button("Continue Game"))
+        main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
+        main_menu_objects.append(tp.Button("New Game"))
+        main_menu_objects[len(main_menu_objects)-1].at_unclick=partial(change_window, "save_game")
+        main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
+        main_menu_objects.append(tp.Button("Save Game"))
+        main_menu_objects[len(main_menu_objects)-1].at_unclick=partial(change_window, "save_game")
+        main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
+        main_menu_objects.append(tp.Button("Load Game"))
+        main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
+        main_menu_objects.append(tp.Button("Options & Credits"))
+        main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
+        main_menu_objects.append(tp.Button("Exit"))
+        main_menu_objects[len(main_menu_objects)-1].at_unclick=pygame.quit
+        main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
+
+        main_group = tp.TitleBox("Poison Ivy Options", main_menu_objects)
+        # main_group.set_size((500,500))
+        main_group.sort_children(gap=20)
+        main_group.center_on(screen)
+    elif leaf == "save_game":
+        save_group_left = []
+        save_group_center = []
+        save_group_right = []
+        for i in range(15):
+            if i < 5:
+                save_group_left.append(tp.Button("--- Save to Slot "+str(i)+" ---"))
+                save_group_left[len(save_group_left)-1].at_unclick=partial(save_game, i)
+            elif i < 10:
+                save_group_center.append(tp.Button("--- Save to Slot "+str(i)+" ---"))
+                save_group_center[len(save_group_center)-1].at_unclick=partial(save_game, i)
+            elif i < 15:
+                save_group_right.append(tp.Button("--- Save to Slot "+str(i)+" ---"))
+                save_group_right[len(save_group_right)-1].at_unclick=partial(save_game, i)
+        save_group_left_box = tp.Group(save_group_left, "v")
+        save_group_center_box = tp.Group(save_group_center, "v")
+        save_group_right_box = tp.Group(save_group_right, "v")
+        save_back_to_menu_button = tp.Button("Back to Main Menu")
+        save_back_to_menu_button.at_unclick=partial(change_window, "main_menu")
+        save_back_to_menu_button.generate_shadow(fast=True)
+        last_horizontal = tp.Group([save_group_left_box, save_group_center_box, save_group_right_box], "h")
+        save_all = tp.Group([last_horizontal, save_back_to_menu_button], "v")
+
+        main_group = tp.Group([save_all], "h")
+        main_group.sort_children(gap=20)
+        main_group.center_on(screen)
+        
     updater = main_group.get_updater()
 
-main_menu_objects = []
-main_menu_objects.append(tp.Button("Continue Game"))
-main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
-main_menu_objects.append(tp.Button("New Game"))
-main_menu_objects[len(main_menu_objects)-1].at_unclick=change_window
-main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
-main_menu_objects.append(tp.Button("Save Game"))
-main_menu_objects[len(main_menu_objects)-1].at_unclick=save_game_pressed
-main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
-main_menu_objects.append(tp.Button("Load Game"))
-main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
-main_menu_objects.append(tp.Button("Options & Credits"))
-main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
-main_menu_objects.append(tp.Button("Exit"))
-main_menu_objects[len(main_menu_objects)-1].at_unclick=pygame.quit
-main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
+def save_game(number):
+    alert = tp.AlertWithChoices("Saving Game", ("Yes", "No"), text="Do you wish to save into this slot.\nOld save is formatted.")
+    alert.generate_shadow(fast=False) 
+    alert.launch_alone(click_outside_cancel=True) #tune some options if you like
+    if alert.choice == "Yes":
+        print("Saving to slot "+str(number))
 
-main_group = tp.TitleBox("Poison Ivy Options", main_menu_objects)
-# main_group.set_size((500,500))
-main_group.sort_children(gap=20)
-main_group.center_on(screen)
-
-updater = main_group.get_updater()
-
-
+change_window("main_menu")
 
 clock = pygame.time.Clock()
 
@@ -132,12 +150,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if leaf == "main_menu":
-            a = 1
+    screen.fill((150,150,150)) # Clear screen
 
-    if leaf == "main_menu":
-        screen.fill((150,150,150)) # Clear screen
-
+    if leaf == "main_menu" or leaf =="save_game":
         fps_text = normal_font.render("FPS = "+str(round(clock.get_fps()))+" MIN_TARGET = "+str(GAME_FPS), True, pygame.Color(255, 165, 0, a=140), None)
         screen.blit(fps_text,(0,0))
 
@@ -147,6 +162,11 @@ while running:
         screen.blit(dark_elf_main_scaled, (screen_width-golden_chest_main_width-dark_elf_main_width-10-10, screen_height-dark_elf_main_height-10))
         screen.blit(gladiator_text, (screen_width-gladiator_text_width-10, screen_height-dark_elf_main_height-10-gladiator_text_height))
 
+    if leaf == "main_menu":
+        a = 1
+    elif leaf == "save_game":
+        screen.blit(saving_text, (screen_width/2-saving_text_w/2,0.3*screen_height))
+        
     updater.update(events=pygame.event.get(), mouse_rel=pygame.mouse.get_rel())
 
     pygame.display.flip() # Update display
