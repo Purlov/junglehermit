@@ -61,19 +61,19 @@ for i in range(15):
         save_gamer = save_game(i)
         save_game_objects[len(save_game_objects)-1].at_unclick=save_gamer
 
-def change_window(number):
-    print(str(number))
+def change_window():
+    for i in range(len(all_windows)):
+        for j in range(len(all_windows[i])):
+            all_windows[i][j].unblit()
 
 main_menu_objects = []
 main_menu_objects.append(tp.Button("Continue Game"))
 main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
 main_menu_objects.append(tp.Button("New Game"))
-window_changer = change_window(7)
-main_menu_objects[len(main_menu_objects)-1].at_unclick=window_changer
+main_menu_objects[len(main_menu_objects)-1].at_unclick=change_window
 main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
 main_menu_objects.append(tp.Button("Save Game"))
-window_changer = change_window(2)
-main_menu_objects[len(main_menu_objects)-1].at_unclick=window_changer
+main_menu_objects[len(main_menu_objects)-1].at_unclick=change_window
 main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
 main_menu_objects.append(tp.Button("Load Game"))
 main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
@@ -82,6 +82,10 @@ main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
 main_menu_objects.append(tp.Button("Exit"))
 main_menu_objects[len(main_menu_objects)-1].at_unclick=pygame.quit
 main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
+
+all_windows = []
+all_windows.append(main_menu_objects)
+all_windows.append(save_game_objects)
 
 main_group = tp.TitleBox("Poison Ivy Options", main_menu_objects)
 # main_group.set_size((500,500))
@@ -103,7 +107,7 @@ while running:
     #menu.draw() # Draw all elements in menu
 
     screen.fill((150,150,150)) # Clear screen
-    fps_text = normal_font.render("FPS = "+str(clock.get_fps()), True, pygame.Color(50, 50, 0, a=140), None)
+    fps_text = normal_font.render("FPS = "+str(round(clock.get_fps()))+" TARGET = 144", True, pygame.Color(255, 165, 0, a=140), None)
     screen.blit(fps_text,(0,0))
 
     updater.update(events=pygame.event.get(), mouse_rel=pygame.mouse.get_rel())
