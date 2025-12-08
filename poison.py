@@ -76,6 +76,9 @@ gladiator_text_width, gladiator_text_height = gladiator_text.get_size()
 saving_text = normal_font.render("Saving the Game", True, pygame.Color(255, 165, 0, a=140), None)
 saving_text_w, saving_text_h = saving_text.get_size()
 
+loading_text = normal_font.render("Loading the Game", True, pygame.Color(255, 165, 0, a=140), None)
+loading_text_w, loading_text_h = loading_text.get_size()
+
 def change_window(name):
     global updater
     global leaf 
@@ -91,6 +94,7 @@ def change_window(name):
         main_menu_objects[len(main_menu_objects)-1].at_unclick=partial(change_window, "save_game")
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
         main_menu_objects.append(tp.Button("Load Game"))
+        main_menu_objects[len(main_menu_objects)-1].at_unclick=partial(change_window, "load_game")
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
         main_menu_objects.append(tp.Button("Options & Credits"))
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
@@ -128,16 +132,49 @@ def change_window(name):
         main_group = tp.Group([save_all], "h")
         main_group.sort_children(gap=20)
         main_group.center_on(screen)
+    elif leaf == "load_game":
+        save_group_left = []
+        save_group_center = []
+        save_group_right = []
+        for i in range(15):
+            if i < 5:
+                save_group_left.append(tp.Button("--- Load from Slot "+str(i)+" ---"))
+                save_group_left[len(save_group_left)-1].at_unclick=partial(load_game, i)
+            elif i < 10:
+                save_group_center.append(tp.Button("--- Load from Slot "+str(i)+" ---"))
+                save_group_center[len(save_group_center)-1].at_unclick=partial(load_game, i)
+            elif i < 15:
+                save_group_right.append(tp.Button("--- Load from Slot "+str(i)+" ---"))
+                save_group_right[len(save_group_right)-1].at_unclick=partial(load_game, i)
+        save_group_left_box = tp.Group(save_group_left, "v")
+        save_group_center_box = tp.Group(save_group_center, "v")
+        save_group_right_box = tp.Group(save_group_right, "v")
+        save_back_to_menu_button = tp.Button("Back to Main Menu")
+        save_back_to_menu_button.at_unclick=partial(change_window, "main_menu")
+        save_back_to_menu_button.generate_shadow(fast=True)
+        last_horizontal = tp.Group([save_group_left_box, save_group_center_box, save_group_right_box], "h")
+        save_all = tp.Group([last_horizontal, save_back_to_menu_button], "v")
+
+        main_group = tp.Group([save_all], "h")
+        main_group.sort_children(gap=20)
+        main_group.center_on(screen)
         
     updater = main_group.get_updater()
 
 def save_game(number):
     prompt = tp.TextInput("", "Enter Save Name")
-    alert = tp.AlertWithChoices("Saving Game", ("Yes", "No"), text="Do you wish to save into this slot.\nOld save is formatted.", children=[prompt])
+    alert = tp.AlertWithChoices("Saving Game", ("Yes", "No"), text="Do you wish to save into this slot?\nOld save is formatted.", children=[prompt])
     alert.generate_shadow(fast=False) 
     alert.launch_alone(click_outside_cancel=True) #tune some options if you like
     if alert.choice == "Yes":
         print("Saving to slot "+str(number)+" with the slot name "+prompt.get_value())
+
+def load_game(number):
+    alert = tp.AlertWithChoices("Saving Game", ("Yes", "No"), text="Do you wish to load this slot?\nUnsaved progress is lost.")
+    alert.generate_shadow(fast=False) 
+    alert.launch_alone(click_outside_cancel=True) #tune some options if you like
+    if alert.choice == "Yes":
+        print("Loading from slot "+str(number))
 
 change_window("main_menu")
 
@@ -153,7 +190,7 @@ while running:
 
     screen.fill((150,150,150)) # Clear screen
 
-    if leaf == "main_menu" or leaf =="save_game":
+    if leaf == "main_menu" or leaf =="save_game" or leaf=="load_game":
         fps_text = normal_font.render("FPS = "+str(round(clock.get_fps()))+" MIN_TARGET = "+str(GAME_FPS), True, pygame.Color(255, 165, 0, a=140), None)
         screen.blit(fps_text,(0,0))
 
@@ -167,6 +204,8 @@ while running:
         a = 1
     elif leaf == "save_game":
         screen.blit(saving_text, (screen_width/2-saving_text_w/2,0.3*screen_height))
+    elif leaf == "load_game":
+        screen.blit(loading_text, (screen_width/2-loading_text_w/2,0.3*screen_height))
         
     updater.update(events=pygame.event.get(), mouse_rel=pygame.mouse.get_rel())
 
