@@ -2,7 +2,7 @@
 
 GAME_FPS = 144
 
-import sys, pygame, thorpy as tp
+import pygame, thorpy as tp
 from functools import partial
 
 pygame.init()
@@ -165,14 +165,14 @@ def save_game(number):
     prompt = tp.TextInput("", "Enter Save Name")
     alert = tp.AlertWithChoices("Saving Game", ("Yes", "No"), text="Do you wish to save into this slot?\nOld save is formatted.", children=[prompt])
     alert.generate_shadow(fast=False) 
-    alert.launch_alone(click_outside_cancel=True)
+    alert.launch_alone(click_outside_cancel=False) # it would accidentally click other buttons
     if alert.choice == "Yes":
         print("Saving to slot "+str(number)+" with the slot name "+prompt.get_value())
 
 def load_game(number):
     alert = tp.AlertWithChoices("Loading Game", ("Yes", "No"), text="Do you wish to load this slot?\nUnsaved progress is lost.")
     alert.generate_shadow(fast=False) 
-    alert.launch_alone(click_outside_cancel=True)
+    alert.launch_alone(click_outside_cancel=False) # it would accidentally click other buttons
     if alert.choice == "Yes":
         print("Loading from slot "+str(number))
 
