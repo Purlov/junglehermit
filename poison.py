@@ -99,7 +99,7 @@ def change_window(name):
         main_menu_objects.append(tp.Button("Options & Credits"))
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
         main_menu_objects.append(tp.Button("Exit"))
-        main_menu_objects[len(main_menu_objects)-1].at_unclick=pygame.quit
+        main_menu_objects[len(main_menu_objects)-1].at_unclick=exit
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
 
         main_group = tp.TitleBox("Poison Ivy Options", main_menu_objects)
@@ -165,14 +165,14 @@ def save_game(number):
     prompt = tp.TextInput("", "Enter Save Name")
     alert = tp.AlertWithChoices("Saving Game", ("Yes", "No"), text="Do you wish to save into this slot?\nOld save is formatted.", children=[prompt])
     alert.generate_shadow(fast=False) 
-    alert.launch_alone(click_outside_cancel=True) #tune some options if you like
+    alert.launch_alone(click_outside_cancel=True)
     if alert.choice == "Yes":
         print("Saving to slot "+str(number)+" with the slot name "+prompt.get_value())
 
 def load_game(number):
-    alert = tp.AlertWithChoices("Saving Game", ("Yes", "No"), text="Do you wish to load this slot?\nUnsaved progress is lost.")
+    alert = tp.AlertWithChoices("Loading Game", ("Yes", "No"), text="Do you wish to load this slot?\nUnsaved progress is lost.")
     alert.generate_shadow(fast=False) 
-    alert.launch_alone(click_outside_cancel=True) #tune some options if you like
+    alert.launch_alone(click_outside_cancel=True)
     if alert.choice == "Yes":
         print("Loading from slot "+str(number))
 
