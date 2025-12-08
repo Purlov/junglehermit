@@ -1,0 +1,4 @@
+David E. Gervais drawn tiles library has many of these tiles the game is using, like the man in the main menu
+It is published under CC BY 3.0
+http://pousse.rapiere.free.fr/tome/tome-tiles.htm
+

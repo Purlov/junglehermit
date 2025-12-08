@@ -8,7 +8,8 @@ from functools import partial
 pygame.init()
 
 x,y = pygame.display.get_desktop_sizes()[0]
-screen = pygame.display.set_mode((x*0.89, y*0.89))
+screen_width, screen_height = x*0.89, y*0.89
+screen = pygame.display.set_mode((screen_width, screen_height))
 tp.init(screen, tp.theme_game1) #bind screen to gui elements and set theme
 
 pygame.display.set_caption("Poison Ivy")
@@ -54,6 +55,23 @@ box.set_draggable(True, True)
 box.generate_shadow(fast=True)'''
 
 logo = pygame.image.load("gfx/logo.png")
+logo_width, logo_height = logo.get_size()
+
+icon_main_scaled = pygame.transform.scale(icon, (150, 150))
+icon_main_width, icon_main_height = 150, 150
+
+golden_chest = pygame.image.load("gfx/golden_chest.png")
+golden_chest_main_scaled = pygame.transform.scale(golden_chest, (55, 55))
+golden_chest_main_width, golden_chest_main_height = 55, 55
+
+dark_elf = pygame.image.load("gfx/dark_elf.png")
+dark_elf_main_scaled = pygame.transform.scale(dark_elf, (55, 55))
+dark_elf_main_width, dark_elf_main_height = 55, 55
+
+normal_font = pygame.font.Font(None, 32)
+
+gladiator_text = normal_font.render("THE Gladiator", True, pygame.Color(0, 0, 0, a=140), None)
+gladiator_text_width, gladiator_text_height = gladiator_text.get_size()
 
 def save_game(number):
     print(str(number))
@@ -96,8 +114,6 @@ main_group.center_on(screen)
 
 updater = main_group.get_updater()
 
-normal_font = pygame.font.Font(None, 32)
-
 clock = pygame.time.Clock()
 
 running = True
@@ -113,13 +129,11 @@ while running:
     fps_text = normal_font.render("FPS = "+str(round(clock.get_fps()))+" MIN_TARGET = "+str(GAME_FPS), True, pygame.Color(255, 165, 0, a=140), None)
     screen.blit(fps_text,(0,0))
 
-    screen_width, screen_height = pygame.display.get_surface().get_size()
-
-    logo_width, logo_height = logo.get_size()
-    icon_scaled = pygame.transform.scale(icon, (150, 150))
-    icon_width, icon_height = icon_scaled.get_size()
     screen.blit(logo, (screen_width/2-logo_width/2, screen_height*0.085))
-    screen.blit(icon_scaled, (screen_width/2-logo_width/2-icon_width-25, screen_height*0.085))
+    screen.blit(icon_main_scaled, (screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085))
+    screen.blit(golden_chest_main_scaled, (screen_width-golden_chest_main_width-10, screen_height-golden_chest_main_height-10))
+    screen.blit(dark_elf_main_scaled, (screen_width-golden_chest_main_width-dark_elf_main_width-10-10, screen_height-dark_elf_main_height-10))
+    screen.blit(gladiator_text, (screen_width-gladiator_text_width-10, screen_height-dark_elf_main_height-10-gladiator_text_height))
 
     updater.update(events=pygame.event.get(), mouse_rel=pygame.mouse.get_rel())
 
