@@ -69,7 +69,6 @@ else:
     with open("save/save_names", "wb") as file:
         pickle.dump(save_names, file)
 
-
 logo = pygame.image.load("gfx/logo.png")
 logo_width, logo_height = logo.get_size()
 
@@ -177,7 +176,12 @@ def change_window(name):
         
     updater = main_group.get_updater()
 
+Save = {
+    "identifier": random.randint(1111,8888)
+}
+
 def save_game(number):
+    global Save
     prompt = tp.TextInput("", "Enter Save Name")
     alert = tp.AlertWithChoices("Saving Game", ("Yes", "No"), text="Do you wish to save into this slot?\nOld save is formatted.", children=[prompt])
     alert.generate_shadow(fast=False) 
@@ -187,14 +191,20 @@ def save_game(number):
         print("Saving to slot "+str(number)+" with the slot name "+prompt.get_value())
         with open("save/save_names", "wb") as file:
             pickle.dump(save_names, file)
+        with open("save/save"+str(number), "wb") as file:
+            pickle.dump(Save, file)
         change_window("save_game")
 
 def load_game(number):
+    global Save
     alert = tp.AlertWithChoices("Loading Game", ("Yes", "No"), text="Do you wish to load this slot?\nUnsaved progress is lost.")
     alert.generate_shadow(fast=False) 
     alert.launch_alone(click_outside_cancel=False) # it would accidentally click other buttons
     if alert.choice == "Yes":
         print("Loading from slot "+str(number))
+        if path.exists("save/save"+str(number)):
+            with open("save/save"+str(number), "rb") as file:
+                Save = pickle.load(file)
 
 change_window("main_menu")
 
@@ -208,10 +218,13 @@ while running:
 
     screen.fill((150,150,150)) # Clear screen
 
-    if leaf == "main_menu" or leaf =="save_game" or leaf=="load_game":
-        fps_text = normal_font.render("FPS = "+str(round(clock.get_fps()))+" MIN_TARGET = "+str(GAME_FPS), True, pygame.Color(255, 165, 0, a=140), None)
-        screen.blit(fps_text,(0,0))
+    fps_text = normal_font.render("FPS = "+str(round(clock.get_fps()))+" MIN_TARGET = "+str(GAME_FPS), True, pygame.Color(255, 165, 0, a=140), None)
+    screen.blit(fps_text,(10,10))
+    debug_text = normal_font.render("Save identifier="+str(Save["identifier"]), True, pygame.Color(255, 165, 0, a=140), None)
+    debug_text_w, debug_text_h = loading_text.get_size()
+    screen.blit(debug_text,(10,screen_height-10-debug_text_h))
 
+    if leaf == "main_menu" or leaf =="save_game" or leaf=="load_game":
         screen.blit(logo, (screen_width/2-logo_width/2, screen_height*0.085))
         screen.blit(icon_main_scaled, (screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085))
         screen.blit(golden_chest_main_scaled, (screen_width-golden_chest_main_width-10, screen_height-golden_chest_main_height-10))
