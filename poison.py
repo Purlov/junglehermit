@@ -4,6 +4,11 @@ GAME_FPS = 144
 
 import pygame, thorpy as tp
 from functools import partial
+from os import path
+import random
+import pickle
+
+random.seed()
 
 pygame.init()
 
@@ -53,6 +58,17 @@ some_text.set_draggable(True, True)
 box = tp.TitleBox("Some demo box", [tp.Text("In this case, fast=True\nmay be well suited.")])
 box.set_draggable(True, True)
 box.generate_shadow(fast=True)'''
+
+save_names = []
+if path.exists("save/save_names"):
+    with open("save/save_names", "rb") as file:
+        save_names = pickle.load(file)
+else:
+    for i in range(15):
+        save_names.append("--- Empty Save Slot Number "+str(i)+" ---")
+    with open("save/save_names", "wb") as file:
+        pickle.dump(save_names, file)
+
 
 logo = pygame.image.load("gfx/logo.png")
 logo_width, logo_height = logo.get_size()
@@ -112,13 +128,13 @@ def change_window(name):
         save_group_right = []
         for i in range(15):
             if i < 5:
-                save_group_left.append(tp.Button("--- Save to Slot "+str(i)+" ---"))
+                save_group_left.append(tp.Button(save_names[i]))
                 save_group_left[len(save_group_left)-1].at_unclick=partial(save_game, i)
             elif i < 10:
-                save_group_center.append(tp.Button("--- Save to Slot "+str(i)+" ---"))
+                save_group_center.append(tp.Button(save_names[i]))
                 save_group_center[len(save_group_center)-1].at_unclick=partial(save_game, i)
             elif i < 15:
-                save_group_right.append(tp.Button("--- Save to Slot "+str(i)+" ---"))
+                save_group_right.append(tp.Button(save_names[i]))
                 save_group_right[len(save_group_right)-1].at_unclick=partial(save_game, i)
         save_group_left_box = tp.Group(save_group_left, "v")
         save_group_center_box = tp.Group(save_group_center, "v")
@@ -138,13 +154,13 @@ def change_window(name):
         save_group_right = []
         for i in range(15):
             if i < 5:
-                save_group_left.append(tp.Button("--- Load from Slot "+str(i)+" ---"))
+                save_group_left.append(tp.Button(save_names[i]))
                 save_group_left[len(save_group_left)-1].at_unclick=partial(load_game, i)
             elif i < 10:
-                save_group_center.append(tp.Button("--- Load from Slot "+str(i)+" ---"))
+                save_group_center.append(tp.Button(save_names[i]))
                 save_group_center[len(save_group_center)-1].at_unclick=partial(load_game, i)
             elif i < 15:
-                save_group_right.append(tp.Button("--- Load from Slot "+str(i)+" ---"))
+                save_group_right.append(tp.Button(save_names[i]))
                 save_group_right[len(save_group_right)-1].at_unclick=partial(load_game, i)
         save_group_left_box = tp.Group(save_group_left, "v")
         save_group_center_box = tp.Group(save_group_center, "v")
@@ -167,7 +183,11 @@ def save_game(number):
     alert.generate_shadow(fast=False) 
     alert.launch_alone(click_outside_cancel=False) # it would accidentally click other buttons
     if alert.choice == "Yes":
+        save_names[number] = prompt.get_value()
         print("Saving to slot "+str(number)+" with the slot name "+prompt.get_value())
+        with open("save/save_names", "wb") as file:
+            pickle.dump(save_names, file)
+        change_window("save_game")
 
 def load_game(number):
     alert = tp.AlertWithChoices("Loading Game", ("Yes", "No"), text="Do you wish to load this slot?\nUnsaved progress is lost.")
@@ -179,8 +199,6 @@ def load_game(number):
 change_window("main_menu")
 
 clock = pygame.time.Clock()
-
-leaf = "main_menu"
 
 running = True
 while running:
