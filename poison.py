@@ -231,7 +231,7 @@ def change_window(name):
         move_options_text("refresh")
     elif leaf == "new_game":
         global new_type_toggle, new_game_monster_description, new_game_name
-        new_type_toggle = tp.TogglablesPool("Character Types", ("Taurian", "Dark Elf", "Skeleton"), "Taurian")
+        new_type_toggle = tp.TogglablesPool("Character Types", ("Taurian", "Dark Elf", "Skeleton"), Save["character_type"].title())
         new_type_toggle.at_unclick=change_character_type
 
         save_back_to_menu_button = tp.Button("Back to Main Menu")
@@ -244,14 +244,15 @@ def change_window(name):
 
         bottom_buttons = tp.Group([start_the_game_button, save_back_to_menu_button], "h")
 
-        new_game_name = tp.TextInput("", placeholder="Can be changed later")
+        new_game_name = tp.TextInput(Save["character_name"], placeholder="Can be changed later")
+        new_game_name.at_cancel=save_written_name
         new_game_name_descr = tp.Text("Character Name")
         new_game_namers = tp.Group([new_game_name_descr, new_game_name], "h")
         #padder = tp.Text("\n"*10, font_size=24)
         padder1 = tp.Text((" "*100+"\n")*11, font_size=24)
         new_game_monster_description = tp.Text(Types["monster"][Save["character_type"]]["description"], max_width=400)
 
-        change_character_type()
+        #change_character_type()
 
         image_and_text = tp.Group([padder1,new_game_monster_description], "h")
         
@@ -263,6 +264,9 @@ def change_window(name):
         main_group.center_on(screen)
         
     updater = main_group.get_updater()
+
+def save_written_name():
+    Save["character_name"] = new_game_name.get_value()
 
 options_current_h = 0
 def move_options_text(direction):
@@ -292,6 +296,7 @@ def load_tile(img, size):
 
 Save = {
     "identifier": random.randint(1111,8888),
+    "character_name": "",
     "character_type": "taurian",
 }
 
