@@ -231,7 +231,7 @@ def change_window(name):
         move_options_text("refresh")
     elif leaf == "new_game":
         global new_type_toggle, new_game_monster_description, new_game_name
-        new_type_toggle = tp.TogglablesPool("Character Types", ("Taurian", "Dark Elf", "Skeleton"), Save["character_type"].title())
+        new_type_toggle = tp.TogglablesPool("Character Types", ("Taurian", "Dark Elf", "Skeleton", "Cyclops"), Save["character_type"].title())
         #new_type_toggle.at_unclick=change_character_type #commented since it is watched in the main loop
 
         save_back_to_menu_button = tp.Button("Back to Main Menu")
@@ -322,6 +322,13 @@ Types = {
             "img_max": load_tile("gfx/skeleton.png", monster_tile_size_max),
             "hp": 100,
             "description": "This is the vanilla version on github. Derivatives must be clearly labeled as such. Basically a gladiator simulator. Here's some stream of consciousness crap that may not all exist: In this game you are a gladiator in your team of computer gladiators. They fight automatically and you fight on their side. The team leadership issues you equipment and spells and also own money which can be used to buy more equipment or go to a bar with the computer gladiators from your team or others'. The more they are friends"
+        },
+        "cyclops": {
+            "img_min": load_tile("gfx/cyclops.png", monster_tile_size_min),
+            "img_med": load_tile("gfx/cyclops.png", monster_tile_size_med),
+            "img_max": load_tile("gfx/cyclops.png", monster_tile_size_max),
+            "hp": 100,
+            "description": "Fusce et vehicula justo. Duis laoreet leo elit, quis luctus leo imperdiet ut. Vivamus fringilla dui vulputate arcu cursus varius. Mauris sed nisi erat. In et ligula et augue pretium auctor quis eu ex. Nam quis elit ultrices, sollicitudin enim in, lacinia nunc. Nulla dapibus libero at odio facilisis tristique. Sed malesuada justo nec elit pellentesque vestibulum ac vitae justo. Nam sit amet elit ultrices, varius ipsum sed, consectetur dolor. Aliquam mattis semper imperdiet. Phasellus semper tincidunt metus, id blandit mauris rutrum at. Aenean nec mauris efficitur, feugiat ex ut, imperdiet tellus."
         }
     }
 }
