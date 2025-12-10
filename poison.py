@@ -83,6 +83,9 @@ else:
 logo = pygame.image.load("gfx/logo.png")
 logo_width, logo_height = logo.get_size()
 
+new_game_logo = pygame.image.load("gfx/new_game_logo.png")
+new_game_logo_width, new_game_logo_height = new_game_logo.get_size()
+
 icon_main_scaled = pygame.transform.scale(icon, (150, 150))
 icon_main_width, icon_main_height = 150, 150
 
@@ -122,7 +125,7 @@ def change_window(name):
         main_menu_objects.append(tp.Button("Continue Game"))
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
         main_menu_objects.append(tp.Button("New Game"))
-        main_menu_objects[len(main_menu_objects)-1].at_unclick=partial(change_window, "save_game")
+        main_menu_objects[len(main_menu_objects)-1].at_unclick=partial(change_window, "new_game")
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
         main_menu_objects.append(tp.Button("Save Game"))
         main_menu_objects[len(main_menu_objects)-1].at_unclick=partial(change_window, "save_game")
@@ -225,7 +228,36 @@ def change_window(name):
         main_group.sort_children(gap=20)
         main_group.center_on(screen)
 
-        move_options_text("up")
+        move_options_text("refresh")
+    elif leaf == "new_game":
+        global new_type_toggle, new_game_monster_description
+        new_type_toggle = tp.TogglablesPool("Character Types", ("Taurian", "Dark Elf"), "Taurian")
+        new_type_toggle.at_unclick=change_character_type
+
+        save_back_to_menu_button = tp.Button("Back to Main Menu")
+        save_back_to_menu_button.at_unclick=partial(change_window, "main_menu")
+        save_back_to_menu_button.generate_shadow(fast=True)
+
+        start_the_game_button = tp.Button("Start the Game")
+        start_the_game_button.at_unclick=partial(change_window, "lobby")
+        start_the_game_button.generate_shadow(fast=True)
+
+        bottom_buttons = tp.Group([start_the_game_button, save_back_to_menu_button], "h")
+
+        #padder = tp.Text("\n"*10, font_size=24)
+        padder1 = tp.Text((" "*100+"\n")*11, font_size=24)
+        new_game_monster_description = tp.Text(Types["monster"][Save["character_type"]]["description"], max_width=400)
+
+        change_character_type()
+
+        image_and_text = tp.Group([padder1,new_game_monster_description], "h")
+        
+        padder2 = tp.Text("\n"*2, font_size=24)
+        save_all = tp.Group([padder2,new_type_toggle,image_and_text,bottom_buttons], "v")
+
+        main_group = tp.Group([save_all], "h")
+        main_group.sort_children(gap=20)
+        main_group.center_on(screen)
         
     updater = main_group.get_updater()
 
@@ -242,8 +274,41 @@ def move_options_text(direction):
     licenses_area.set_text(license_text)
     licenses_area.set_topleft(screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25)
 
+def change_character_type():
+    if new_type_toggle.get_value() != "":
+        Save["character_type"] = new_type_toggle.get_value().lower()
+        print(Save["character_type"].capitalize()+" chosen")
+        new_game_monster_description.set_text(Types["monster"][Save["character_type"]]["description"], max_width=400)
+
+monster_tile_size_min = 32
+monster_tile_size_med = 55
+monster_tile_size_max = 155
+
+def load_tile(img, size):
+    return pygame.transform.scale(pygame.image.load(img), (size,)*2)
+
 Save = {
-    "identifier": random.randint(1111,8888)
+    "identifier": random.randint(1111,8888),
+    "character_type": "taurian",
+}
+
+Types = {
+    "monster": {
+        "taurian": {
+            "img_min": load_tile("gfx/taurian.png", monster_tile_size_min),
+            "img_med": load_tile("gfx/taurian.png", monster_tile_size_med),
+            "img_max": load_tile("gfx/taurian.png", monster_tile_size_max),
+            "hp": 100,
+            "description": "wazaal\nasdalaksd\ncompressum don't know what up with taurians these days vdon't know what up with taurians these daysdon't know what up with taurians these daysdon't know what up with taurians these daysdon't know what up with taurians these days"
+        }, 
+        "dark elf": {
+            "img_min": load_tile("gfx/dark_elf.png", monster_tile_size_min),
+            "img_med": load_tile("gfx/dark_elf.png", monster_tile_size_med),
+            "img_max": load_tile("gfx/dark_elf.png", monster_tile_size_max),
+            "hp": 100,
+            "description": "Dark elf is a frost mage that's all I know for sure. wazaal is happening all over the place wazaal is happening all over the place wazaal is happening all over the place wazaal is happening all over the place wazaal is happening all over the place comprentos amores montecarlos place comprentos amores montecarlos place comprentos amores montecarlosplace comprentos amores montecarlosplace comprentos amores ads 244 with robot sonic 5556  vads 244 with robot sonic 5556  ads 244 with robot sonic 5556 "
+        }
+    }
 }
 
 def save_game(number):
@@ -330,7 +395,12 @@ while running:
         pygame.draw.rect(screen, (50,150,50), (screen_width/2-logo_width/2-icon_main_width-25-10, screen_height*0.085+icon_main_height+25-10,1000+20,400+20))
         pygame.draw.rect(screen, (50,50,250), (screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25,1000,400))
         #screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25
-        
+    elif leaf == "new_game":
+        screen.blit(new_game_logo, (screen_width/2-new_game_logo_width/2, screen_height*0.085))
+
+        if new_type_toggle.get_value().lower() != Save["character_type"]:
+            change_character_type()
+
     updater.update(events=pygame.event.get(), mouse_rel=pygame.mouse.get_rel())
 
     pygame.display.flip() # Update display
