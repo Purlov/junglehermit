@@ -230,7 +230,7 @@ def change_window(name):
 
         move_options_text("refresh")
     elif leaf == "new_game":
-        global new_type_toggle, new_game_monster_description
+        global new_type_toggle, new_game_monster_description, new_game_name
         new_type_toggle = tp.TogglablesPool("Character Types", ("Taurian", "Dark Elf"), "Taurian")
         new_type_toggle.at_unclick=change_character_type
 
@@ -244,6 +244,9 @@ def change_window(name):
 
         bottom_buttons = tp.Group([start_the_game_button, save_back_to_menu_button], "h")
 
+        new_game_name = tp.TextInput("", placeholder="Can be changed later")
+        new_game_name_descr = tp.Text("Character Name")
+        new_game_namers = tp.Group([new_game_name_descr, new_game_name], "h")
         #padder = tp.Text("\n"*10, font_size=24)
         padder1 = tp.Text((" "*100+"\n")*11, font_size=24)
         new_game_monster_description = tp.Text(Types["monster"][Save["character_type"]]["description"], max_width=400)
@@ -253,7 +256,7 @@ def change_window(name):
         image_and_text = tp.Group([padder1,new_game_monster_description], "h")
         
         padder2 = tp.Text("\n"*2, font_size=24)
-        save_all = tp.Group([padder2,new_type_toggle,image_and_text,bottom_buttons], "v")
+        save_all = tp.Group([padder2,new_type_toggle,image_and_text,new_game_namers,bottom_buttons], "v")
 
         main_group = tp.Group([save_all], "h")
         main_group.sort_children(gap=20)
@@ -397,6 +400,9 @@ while running:
         #screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25
     elif leaf == "new_game":
         screen.blit(new_game_logo, (screen_width/2-new_game_logo_width/2, screen_height*0.085))
+        img = Types["monster"][Save["character_type"]]["img_max"]
+        w,h = img.get_size()
+        screen.blit(img, (screen_width/2-w, screen_height/2-40))
 
         if new_type_toggle.get_value().lower() != Save["character_type"]:
             change_character_type()
