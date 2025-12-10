@@ -23,6 +23,8 @@ x,y = pygame.display.get_desktop_sizes()[0]
 print("Screen resolution "+str(x)+" x "+str(y))
 screen_width, screen_height = 1366,768 #x*0.89, y*0.89
 print("Window resolution "+str(1366)+" x "+str(768))
+if x <= 1366:
+    print("\033[31mScreen size smaller or equal than window size!\033[0m")
 screen = pygame.display.set_mode((screen_width, screen_height))
 tp.init(screen, tp.theme_game1)
 
