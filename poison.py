@@ -15,16 +15,25 @@ random.seed()
 
 pygame.init()
 
-x,y = pygame.display.get_desktop_sizes()[0]
-screen_width, screen_height = x*0.89, y*0.89
-screen = pygame.display.set_mode((screen_width, screen_height))
-tp.init(screen, tp.theme_game1)
-
 pygame.display.set_caption("Poison Ivy")
 icon = pygame.image.load("gfx/ivyleaf.png")
 pygame.display.set_icon(icon)
 
+x,y = pygame.display.get_desktop_sizes()[0]
+print("Screen resolution "+str(x)+" x "+str(y))
+screen_width, screen_height = 1366,768 #x*0.89, y*0.89
+print("Window resolution "+str(1366)+" x "+str(768))
+screen = pygame.display.set_mode((screen_width, screen_height))
+tp.init(screen, tp.theme_game1)
+
 tp.set_default_font(("arial"), 24)
+
+'''def go_full_screen():
+    global screen
+    screen = pygame.display.set_mode((1366,768), pygame.FULLSCREEN)
+
+def go_windowed():
+    pygame.display.toggle_fullscreen()'''
 
 '''text = tp.Text("Here we use a dummy, Paint-generated\nimage for demonstration. "+\
                    "Try to move the elements below.")
@@ -135,6 +144,9 @@ def change_window(name):
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
         main_menu_objects.append(tp.Button("Options & Credits"))
         main_menu_objects[len(main_menu_objects)-1].at_unclick=partial(change_window, "options")
+        main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
+        main_menu_objects.append(tp.Button("Toggle Screen"))
+        main_menu_objects[len(main_menu_objects)-1].at_unclick=pygame.display.toggle_fullscreen
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
         main_menu_objects.append(tp.Button("Exit"))
         main_menu_objects[len(main_menu_objects)-1].at_unclick=exit_game
