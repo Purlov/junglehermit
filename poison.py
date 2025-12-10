@@ -24,6 +24,8 @@ pygame.display.set_caption("Poison Ivy")
 icon = pygame.image.load("gfx/ivyleaf.png")
 pygame.display.set_icon(icon)
 
+tp.set_default_font(("arial"), 24)
+
 '''text = tp.Text("Here we use a dummy, Paint-generated\nimage for demonstration. "+\
                    "Try to move the elements below.")
 text.set_max_text_width(400)
@@ -205,6 +207,8 @@ def change_window(name):
         #empty_area = tp.OutlinedText("\n", font_size=32, max_width=100, font_color=(250,250,250), outline_color=(50,50,50), outline_thickness=2)
        # empty_box = tp.Box([empty_area], scrollbar_if_needed= True, size_limit=(300,100))
 
+        padder = tp.Text("\n"*4, font_size=24)
+
         options_up = tp.Button("Move up")
         options_up.at_unclick=partial(move_options_text, "up")
         options_up.generate_shadow(fast=True)
@@ -215,7 +219,7 @@ def change_window(name):
 
         last_horizontals1 = tp.Group([licenses_area], "h")
         last_horizontals2 = tp.Group([options_up, save_back_to_menu_button, options_down], "h")
-        save_all = tp.Group([last_horizontals1, last_horizontals2], "v")
+        save_all = tp.Group([last_horizontals1, padder, last_horizontals2], "v")
 
         main_group = tp.Group([save_all], "h")
         main_group.sort_children(gap=20)
@@ -234,7 +238,7 @@ def move_options_text(direction):
     elif direction == "up":
         options_current_h = max(0,options_current_h - 2)
     
-    license_text = "\n".join(license_text_spliced[options_current_h:options_current_h+9])
+    license_text = "\n".join(license_text_spliced[options_current_h:options_current_h+14])
     licenses_area.set_text(license_text)
     licenses_area.set_topleft(screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25)
 
@@ -278,6 +282,18 @@ change_window("main_menu")
 
 clock = pygame.time.Clock()
 
+def before_gui():
+    screen.fill((50,255,20))
+    if leaf == "main_menu":
+        a = 1
+    elif leaf == "save_game":
+        a = 1
+    elif leaf == "load_game":
+        a = 1
+    elif leaf == "options":
+        a = 1
+tp.call_before_gui(before_gui)
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -310,7 +326,9 @@ while running:
     elif leaf == "load_game":
         screen.blit(loading_text, (screen_width/2-loading_text_w/2,0.3*screen_height))
     elif leaf == "options":
-        a = 1
+        #screen.fill((150,0,0))
+        pygame.draw.rect(screen, (50,50,250), (screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25,1000,400))
+        #screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25
         
     updater.update(events=pygame.event.get(), mouse_rel=pygame.mouse.get_rel())
 
