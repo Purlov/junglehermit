@@ -356,18 +356,7 @@ def recolor_surface(surface, target_hue):
             surface.set_at((x, y), (nr, ng, nb, a))
     return surface
 
-monster_tile_size_min = 32
-monster_tile_size_med = 55
-monster_tile_size_max = 155
-
-processed_images = [[]]
-
-old_char_color = (255,255,255,255)
-
-def color_tiles(i):
-    global old_char_color,processed_images
-
-    def rgb_to_hue_branchless(r, g, b):
+def rgb_to_hue_branchless(r, g, b):
         # Normalize to [0,1]
         r, g, b = r/255.0, g/255.0, b/255.0
         
@@ -389,6 +378,17 @@ def color_tiles(i):
         
         # Scale to degrees
         return 60.0 * hue
+
+monster_tile_size_min = 32
+monster_tile_size_med = 55
+monster_tile_size_max = 155
+
+processed_images = [[]]
+
+old_char_color = (255,255,255,255)
+
+def color_tiles(i):
+    global old_char_color,processed_images
 
     if i == 0:
         old_char_color = new_game_color_picker.get_value()
