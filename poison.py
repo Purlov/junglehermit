@@ -271,6 +271,7 @@ def change_window(name):
 
         new_game_color_picker = tp.ColorPicker()
         #new_game_color_picker.at_cancel=partial(color_tiles, 0) #watched in main loop
+        new_game_color_picker.set_value(old_char_color)
 
         color_tiles(0)
 
@@ -360,6 +361,8 @@ monster_tile_size_med = 55
 monster_tile_size_max = 155
 
 processed_images = [[]]
+
+old_char_color = (255,255,255,255)
 
 def color_tiles(i):
     global old_char_color,processed_images
