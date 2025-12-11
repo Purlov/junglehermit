@@ -427,21 +427,21 @@ Types = {
             "img_med": load_tile("gfx/dark_elf.png", monster_tile_size_med),
             "img_max": load_tile("gfx/dark_elf.png", monster_tile_size_max),
             "hp": 100,
-            "description": "Dark elf is a frost mage that's all I know for sure. wazaal is happening all over the place wazaal is happening all over the place wazaal is happening all over the place wazaal is happening all over the place wazaal is happening all over the place comprentos amores montecarlos place comprentos amores montecarlos place comprentos amores montecarlosplace comprentos amores montecarlosplace comprentos amores ads 244 with robot sonic 5556  vads 244 with robot sonic 5556  ads 244 with robot sonic 5556 "
+            "description": "Dark Elf is a frost mage who sings enemies into ice cubes. Their tactics are to slow enemies who are more powerful than they are or outright turn them into cubes which blocks the elf's own action completely as well."
         },
         "skeleton": {
             "img_min": load_tile("gfx/skeleton.png", monster_tile_size_min),
             "img_med": load_tile("gfx/skeleton.png", monster_tile_size_med),
             "img_max": load_tile("gfx/skeleton.png", monster_tile_size_max),
             "hp": 100,
-            "description": "This is the vanilla version on github. Derivatives must be clearly labeled as such. Basically a gladiator simulator. Here's some stream of consciousness crap that may not all exist: In this game you are a gladiator in your team of computer gladiators. They fight automatically and you fight on their side. The team leadership issues you equipment and spells and also own money which can be used to buy more equipment or go to a bar with the computer gladiators from your team or others'. The more they are friends"
+            "description": "Skeletons have been animated by people who shouldn't have done that. The skeletons are angry at life and so they collect all kinds of spells and are one of the most powerful spell casters in the Poisonous Realm."
         },
         "cyclops": {
             "img_min": load_tile("gfx/cyclops.png", monster_tile_size_min),
             "img_med": load_tile("gfx/cyclops.png", monster_tile_size_med),
             "img_max": load_tile("gfx/cyclops.png", monster_tile_size_max),
             "hp": 100,
-            "description": "Fusce et vehicula justo. Duis laoreet leo elit, quis luctus leo imperdiet ut. Vivamus fringilla dui vulputate arcu cursus varius. Mauris sed nisi erat. In et ligula et augue pretium auctor quis eu ex. Nam quis elit ultrices, sollicitudin enim in, lacinia nunc. Nulla dapibus libero at odio facilisis tristique. Sed malesuada justo nec elit pellentesque vestibulum ac vitae justo. Nam sit amet elit ultrices, varius ipsum sed, consectetur dolor. Aliquam mattis semper imperdiet. Phasellus semper tincidunt metus, id blandit mauris rutrum at. Aenean nec mauris efficitur, feugiat ex ut, imperdiet tellus."
+            "description": "Cyclopes are really good at lore. That makes them respect unique weapons and armour which are usually not the powerfullest ones. Their tactic is to attack in heavy armour, maybe even a shield. Unique ones at that. Sometimes when a Cyclops is killed they can see the future which means that a random member in the fight dies."
         }
     }
 }
