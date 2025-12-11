@@ -10,6 +10,7 @@ from os import path, mkdir
 import random
 import pickle
 import lzma
+import math
 
 random.seed()
 
@@ -244,7 +245,7 @@ def change_window(name):
 
         move_options_text("refresh")
     elif leaf == "new_game":
-        global new_type_toggle, new_game_monster_description, new_game_name
+        global new_type_toggle, new_game_monster_description, new_game_name, new_game_color_picker
         new_type_toggle = tp.TogglablesPool("Character Types", ("Taurian", "Dark Elf", "Skeleton", "Cyclops"), Save["character_type"].title())
         #new_type_toggle.at_unclick=change_character_type #commented since it is watched in the main loop
 
@@ -263,12 +264,17 @@ def change_window(name):
         new_game_name_descr = tp.Text("Character Name")
         new_game_namers = tp.Group([new_game_name_descr, new_game_name], "h")
         #padder = tp.Text("\n"*10, font_size=24)
-        padder1 = tp.Text((" "*100+"\n")*11, font_size=24)
+        padder1 = tp.Text((" "*40+"\n")*11, font_size=24)
         new_game_monster_description = tp.Text(Types["monster"][Save["character_type"]]["description"], max_width=400)
 
         #change_character_type()
 
-        image_and_text = tp.Group([padder1,new_game_monster_description], "h")
+        new_game_color_picker = tp.ColorPicker()
+        #new_game_color_picker.at_cancel=partial(color_tiles, 0) #watched in main loop
+
+        color_tiles(0)
+
+        image_and_text = tp.Group([new_game_color_picker,padder1,new_game_monster_description], "h")
         
         padder2 = tp.Text("\n"*2, font_size=24)
         save_all = tp.Group([padder2,new_type_toggle,image_and_text,new_game_namers,bottom_buttons], "v")
@@ -300,10 +306,100 @@ def change_character_type():
         Save["character_type"] = new_type_toggle.get_value().lower()
         print(Save["character_type"].title()+" chosen")
         new_game_monster_description.set_text(Types["monster"][Save["character_type"]]["description"], max_width=400)
+        color_tiles(0)
+
+# --- HSV helpers ---
+def rgb_to_hsv(r, g, b):
+    rf, gf, bf = r/255.0, g/255.0, b/255.0
+    mx, mn = max(rf, gf, bf), min(rf, gf, bf)
+    d = mx - mn
+    if d == 0:
+        h = 0.0
+    elif mx == rf:
+        h = (60 * ((gf - bf) / d) + 360) % 360
+    elif mx == gf:
+        h = (60 * ((bf - rf) / d) + 120) % 360
+    else:
+        h = (60 * ((rf - gf) / d) + 240) % 360
+    s = 0.0 if mx == 0 else d / mx
+    v = mx
+    return h, s, v
+
+def hsv_to_rgb(h, s, v):
+    if s == 0:
+        val = int(round(v * 255))
+        return val, val, val
+    h = (h % 360) / 60.0
+    i = int(math.floor(h))
+    f = h - i
+    p = v * (1 - s)
+    q = v * (1 - s * f)
+    t = v * (1 - s * (1 - f))
+    if i == 0: rf, gf, bf = v, t, p
+    elif i == 1: rf, gf, bf = q, v, p
+    elif i == 2: rf, gf, bf = p, v, t
+    elif i == 3: rf, gf, bf = p, q, v
+    elif i == 4: rf, gf, bf = t, p, v
+    else: rf, gf, bf = v, p, q
+    return int(rf*255), int(gf*255), int(bf*255)
+
+# --- Recolor function ---
+def recolor_surface(surface, target_hue):
+    w, h = surface.get_size()
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = surface.get_at((x, y))
+            h0, s, v = rgb_to_hsv(r, g, b)
+            # Replace hue but keep saturation/value
+            nr, ng, nb = hsv_to_rgb(target_hue, s, v)
+            surface.set_at((x, y), (nr, ng, nb, a))
+    return surface
 
 monster_tile_size_min = 32
 monster_tile_size_med = 55
 monster_tile_size_max = 155
+
+processed_images = [[]]
+
+def color_tiles(i):
+    global old_char_color,processed_images
+
+    def rgb_to_hue_branchless(r, g, b):
+        # Normalize to [0,1]
+        r, g, b = r/255.0, g/255.0, b/255.0
+        
+        cmax = max(r, g, b)
+        cmin = min(r, g, b)
+        delta = cmax - cmin
+        
+        # Avoid division by zero
+        if delta == 0:
+            return 0.0
+        
+        # Compute raw hue contributions
+        hr = ((g - b) / delta) % 6
+        hg = ((b - r) / delta) + 2
+        hb = ((r - g) / delta) + 4
+        
+        # Use masks instead of branching
+        hue = (cmax == r) * hr + (cmax == g) * hg + (cmax == b) * hb
+        
+        # Scale to degrees
+        return 60.0 * hue
+
+    if i == 0:
+        old_char_color = new_game_color_picker.get_value()
+
+        hue = rgb_to_hue_branchless(old_char_color[0], old_char_color[1], old_char_color[2])
+        
+        processed1 = recolor_surface(Types["monster"][Save["character_type"]]["img_min"], hue)
+        processed2 = recolor_surface(Types["monster"][Save["character_type"]]["img_med"], hue)
+        processed3 = recolor_surface(Types["monster"][Save["character_type"]]["img_max"], hue)
+
+        processed_images[0] = []
+        processed_images[0].append(processed1)
+        processed_images[0].append(processed2)
+        processed_images[0].append(processed3)
 
 def load_tile(img, size):
     return pygame.transform.scale(pygame.image.load(img), (size,)*2)
@@ -433,12 +529,15 @@ while running:
         #screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25
     elif leaf == "new_game":
         screen.blit(new_game_logo, (screen_width/2-new_game_logo_width/2, screen_height*0.085))
-        img = Types["monster"][Save["character_type"]]["img_max"]
-        w,h = monster_tile_size_max, monster_tile_size_max
-        screen.blit(img, (screen_width/2-w, screen_height/2-40))
+        img = processed_images[0][2]
+        #w,h = monster_tile_size_max, monster_tile_size_max
+        screen.blit(img, (screen_width/2+15, screen_height/2-40))
 
         if new_type_toggle.get_value().lower() != Save["character_type"]:
             change_character_type()
+
+        if new_game_color_picker.get_value() != old_char_color:
+            color_tiles(0)
 
     updater.update(events=pygame.event.get(), mouse_rel=pygame.mouse.get_rel())
 
