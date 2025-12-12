@@ -294,25 +294,48 @@ def change_window(name):
 
         all_types = list(Types["monster"].keys())
         npc_types = []
+        npc_names = []
         for i in range(TEAM_NUMBER*MEMBER_NUMBER):
             npc_types.append(all_types[random.randrange(0,len(all_types))])
             color_tiles(i)
+            npc_names.append(name_generator())
         npc_types[0] = Save["character_type"]
         color_tiles(0)
-
-        npc_images=[[]] # 1,2,3
+        if Save["character_name"] != "":
+            npc_names[0] = Save["character_name"]
 
         Save["npc"] = []
         Save["npc"].append(npc_types)
         Save["npc"].append(processed_images)
 
         for i in range(len(npc_types)):
-            print(npc_types)
+            print(npc_types[i])
+        print(npc_names[random.randrange(len(npc_names))])
+        print(npc_names[random.randrange(len(npc_names))])
+        print(npc_names[random.randrange(len(npc_names))])
+        print(npc_names[random.randrange(len(npc_names))])
         
     updater = main_group.get_updater()
 
 def save_written_name():
     Save["character_name"] = new_game_name.get_value()
+
+def name_generator():
+    # Define syllable pools for different styles
+    syllables = {
+        0 : ["dra", "kor", "mir", "thal", "ven", "zor", "el", "ria", "lun", "gar"],
+        1 : ["tech", "ify", "ly", "zen", "gen", "nova", "sys", "net", "ware", "soft"],
+        2: ["ba", "be", "bi", "bo", "bu", "la", "le", "li", "lo", "lu"]
+    }
+    
+    style = random.randrange(0, len(syllables.keys()))
+    name = ""
+    for _ in range(0, random.randrange(2,3)):
+        name  = name + syllables[style][random.randint(0, len(syllables[style])-1)]
+    
+    name = name.capitalize()
+    
+    return name
 
 options_current_h = 0
 def move_options_text(direction):
