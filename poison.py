@@ -150,6 +150,14 @@ def change_window(name):
     global updater
     global leaf 
     leaf = name
+
+    if leaf == "new_game":
+        alert = tp.AlertWithChoices("Starting New Game", ("Yes", "No"), text="Do you wish to start a new game?\nAll old unsaved progress will be lost.")
+        alert.generate_shadow(fast=False) 
+        alert.launch_alone(click_outside_cancel=False) # it would accidentally click other buttons
+        if alert.choice == "No":
+            leaf = "main_menu"
+        
     if leaf == "main_menu":
         main_menu_objects = []
         main_menu_objects.append(tp.Button("Continue Game"))
@@ -360,9 +368,9 @@ def change_window(name):
         #Save["npc"][1][TEAMS*MEMBERS][2] #last_npc_images_2biggest
         #Save["npc"][2][0] #first npc name, yours
 
-        for i in range(len(npc_types)):
+        '''for i in range(len(npc_types)):
             print(npc_types[i])
-            print(npc_names[i])
+            print(npc_names[i])'''
 
         went_through_new_game = True
 
@@ -563,7 +571,7 @@ def color_tiles_memory(i):
     global processed_images
 
     color = saved_rgb[i]
-    print(str(saved_rgb)+"\n")
+    '''print(str(saved_rgb)+"\n")'''
 
     hue = rgb_to_hue_branchless(color[0], color[1], color[2])
 
@@ -737,10 +745,10 @@ while running:
 
         screen.blit(Types["star sign"]["black cat"]["img_max"], (10, 160))
 
-        star_sign_logo_time = star_sign_logo_time + 2
+        star_sign_logo_time = star_sign_logo_time + 4
         if star_sign_logo_time > slow_animation:
             star_sign_logo_time = 0
-            star_sign_icon_rotation = star_sign_icon_rotation + 0.5
+            star_sign_icon_rotation = star_sign_icon_rotation + 0.25
             if star_sign_icon_rotation >= 360:
                 star_sign_icon_rotation = 0
 
