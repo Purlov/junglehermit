@@ -298,6 +298,7 @@ def change_window(name):
             npc_types.append(all_types[random.randrange(0,len(all_types))])
             color_tiles(i)
         npc_types[0] = Save["character_type"]
+        color_tiles(0)
 
         npc_images=[[]] # 1,2,3
 
@@ -307,8 +308,6 @@ def change_window(name):
 
         for i in range(len(npc_types)):
             print(npc_types)
-
-        color_tiles(0)
         
     updater = main_group.get_updater()
 
