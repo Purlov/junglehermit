@@ -177,6 +177,9 @@ def change_window(name):
         main_menu_objects.append(tp.Button("Toggle Screen"))
         main_menu_objects[len(main_menu_objects)-1].at_unclick=pygame.display.toggle_fullscreen
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
+        main_menu_objects.append(tp.Button("Debug Window"))
+        main_menu_objects[len(main_menu_objects)-1].at_unclick=partial(change_window, "debug")
+        main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
         main_menu_objects.append(tp.Button("Exit"))
         main_menu_objects[len(main_menu_objects)-1].at_unclick=exit_game
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
@@ -689,6 +692,9 @@ slow_animation = round(GAME_FPS/40)
 star_sign_icon_rotation = 0
 star_sign_logo_time = 0
 
+fps_refresh_time = 0
+fps_num = ""
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -701,7 +707,12 @@ while running:
 
     screen.fill((150,150,150)) # Clear screen
 
-    fps_text = normal_font.render("FPS = "+str(round(clock.get_fps()))+" / "+str(GAME_FPS), True, pygame.Color(255, 165, 0, a=140), None)
+    fps_refresh_time += 1
+    if fps_refresh_time >= GAME_FPS/7:
+        fps_refresh_time = 0
+        fps_num = str(round(clock.get_fps()))
+
+    fps_text = normal_font.render("FPS = "+fps_num+" / "+str(GAME_FPS), True, pygame.Color(255, 165, 0, a=140), None)
     screen.blit(fps_text,(10,10))
     debug_text = normal_font.render("Save identifier="+str(Save["identifier"]), True, pygame.Color(255, 165, 0, a=140), None)
     debug_text_w, debug_text_h = loading_text.get_size()
