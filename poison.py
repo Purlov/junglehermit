@@ -145,7 +145,7 @@ Save = {
     "npc": [[]]
 }
 
-went_through_new_game = False
+went_through_lobby = False
 def change_window(name):
     global updater
     global leaf 
@@ -274,7 +274,7 @@ def change_window(name):
 
         move_options_text("refresh")
     elif leaf == "new_game":
-        global new_type_toggle, new_game_monster_description, new_game_name, new_game_color_picker, Save, npc_types, saved_rgb, went_through_new_game
+        global new_type_toggle, new_game_monster_description, new_game_name, new_game_color_picker, Save, npc_types, saved_rgb
         
         new_type_toggle = tp.TogglablesPool("Character Types", ("Taurian", "Dark Elf", "Skeleton", "Cyclops"), Save["character_type"].title())
         #new_type_toggle.at_unclick=change_character_type #commented since it is watched in the main loop
@@ -375,8 +375,6 @@ def change_window(name):
             print(npc_types[i])
             print(npc_names[i])'''
 
-        went_through_new_game = True
-
     elif leaf == "star_sign":
         black_cat_button = tp.Button("Choose Black Cat")
         black_cat_button.at_unclick=partial(choose_sign, "black cat")
@@ -386,6 +384,7 @@ def change_window(name):
         main_group.center_on(screen)
 
     elif leaf == "lobby":
+        global went_through_lobby
         own_team_buttons = []
         for i in range(MEMBER_NUMBER):
             own_team_buttons.append()
@@ -393,6 +392,8 @@ def change_window(name):
         main_group = tp.Group([save_all], "h")
         main_group.sort_children(gap=20)
         main_group.center_on(screen)
+
+        went_through_lobby = True
         
     updater = main_group.get_updater()
 
@@ -634,7 +635,7 @@ Types = {
 
 saved_rgb = []
 def save_game(number):
-    if went_through_new_game == True or loaded_game == True:
+    if went_through_lobby == True or loaded_game == True:
         prompt = tp.TextInput("", "Enter Save Name")
         alert = tp.AlertWithChoices("Saving Game", ("Yes", "No"), text="Do you wish to save into this slot?\nOld save is formatted.", children=[prompt])
         alert.generate_shadow(fast=False) 
