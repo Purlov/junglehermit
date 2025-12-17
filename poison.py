@@ -688,28 +688,28 @@ Types = {
             "img_med": load_tile("gfx/taurian.png", monster_tile_size_med),
             "img_max": load_tile("gfx/taurian.png", monster_tile_size_max),
             "hp": 100,
-            "description": "Taurians are agile and strong. Their type of fighting is close combat with dual weapons. They don't wear armour but they instead dodge. That's a good style. They come from a lush jungle where they cook magic porridges so they have aptitude for magically enchanted weapons."
+            "description": "Taurians are agile and strong. Their type of fighting is close combat with dual weapons. They don't wear armour but they instead dodge. That's a good style. They come from a lush jungle where they cook magic porridges so they have aptitude for magically enchanted things, and the whole area of Poison Ivy."
         }, 
         "dark elf": {
             "img_min": load_tile("gfx/dark_elf.png", monster_tile_size_min),
             "img_med": load_tile("gfx/dark_elf.png", monster_tile_size_med),
             "img_max": load_tile("gfx/dark_elf.png", monster_tile_size_max),
             "hp": 100,
-            "description": "Dark Elf is a frost mage who sings enemies into ice cubes. Their tactics are to slow enemies who are more powerful than they are or outright turn them into cubes which blocks the elf's own action completely as well."
+            "description": "Dark Elf is a frost mage who sings enemies into ice cubes. Their tactics are to slow enemies who are more powerful than they are or outright turn them into cubes which blocks the elf's own action completely as well. Their bones started getting cold so they came to Poison Ivy. Their ice is sometimes effective in this kind of climate."
         },
         "skeleton": {
             "img_min": load_tile("gfx/skeleton.png", monster_tile_size_min),
             "img_med": load_tile("gfx/skeleton.png", monster_tile_size_med),
             "img_max": load_tile("gfx/skeleton.png", monster_tile_size_max),
             "hp": 100,
-            "description": "Skeletons have been animated by people who shouldn't have done that. The skeletons are angry at life and so they collect all kinds of spells and are one of the most powerful spell casters in the Poisonous Realm."
+            "description": "Skeletons have been animated by people who shouldn't have done that. The skeletons are angry at life and so they collect all kinds of spells and are one of the most powerful spell casters in Poison Ivy."
         },
         "cyclops": {
             "img_min": load_tile("gfx/cyclops.png", monster_tile_size_min),
             "img_med": load_tile("gfx/cyclops.png", monster_tile_size_med),
             "img_max": load_tile("gfx/cyclops.png", monster_tile_size_max),
             "hp": 100,
-            "description": "Cyclopes are really good at lore. That makes them respect unique weapons and armour which are usually not the most powerful ones. Their tactic is to attack in heavy armour, maybe even a shield. Unique ones at that. Sometimes when a Cyclops is killed they can see the future which means that a random member in the fight dies."
+            "description": "Cyclopes are really good at lore. That makes them respect unique stuff which might not be the most powerful ones. Their tactic is to go in heavy armour, maybe even a shield. They come to Poison Ivy after lore. Sometimes when a Cyclops is killed they can see the future which means that a random enemy dies as well - maybe even the main boss."
         }
     },
     "star sign": { 
