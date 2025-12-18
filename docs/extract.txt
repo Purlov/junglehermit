@@ -1,0 +1,4 @@
+Locate: your .zip file.
+Right-click: the file and select "Extract All...".
+In the dialog box, choose a destination (the default is fine) and click "Extract".
+A new, unzipped folder will appear with your files. 
