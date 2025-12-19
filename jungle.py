@@ -96,6 +96,9 @@ else:
 logo = pygame.image.load("gfx/logo.png")
 logo_width, logo_height = logo.get_size()
 
+bg_tile = pygame.image.load("gfx/bg_tile.png")
+bg_tile_width, bg_tile_height = bg_tile.get_size()
+
 new_game_logo = pygame.image.load("gfx/new_game_logo.png")
 new_game_logo_width, new_game_logo_height = new_game_logo.get_size()
 new_game_logo_processed = new_game_logo
@@ -694,7 +697,7 @@ Types = {
             "img_med": load_tile("gfx/taurian.png", monster_tile_size_med),
             "img_max": load_tile("gfx/taurian.png", monster_tile_size_max),
             "hp": 100,
-            "description": "Taurians are agile and strong. Their type of fighting is close combat with dual weapons. They don't wear armour but they instead dodge. That's a good style. They come from a lush jungle where they cook magic porridges so they have aptitude for magically enchanted things, and the whole area of this magical jungle."
+            "description": "Taurians are agile and strong. Their type of fighting is close combat with dual weapons. They don't wear armour but they instead dodge. That's a good style. They come from a lush jungle where they cook magic porridges so they have aptitude for magically enchanted things, and the whole area of this new magical jungle as well."
         }, 
         "dark elf": {
             "img_min": load_tile("gfx/dark_elf.png", monster_tile_size_min),
@@ -853,6 +856,11 @@ while running:
     debug_text_w, debug_text_h = loading_text.get_size()
     screen.blit(debug_text,(10,screen_height-10-debug_text_h))
 
+    if leaf == "new_game" or leaf == "star_sign" or leaf == "main_menu" or leaf =="save_game" or leaf=="load_game" or leaf == "options":
+        for x in range(round(screen_width/bg_tile_width)):
+            for y in range(round(screen_height/bg_tile_height)):
+                screen.blit(bg_tile, (x*bg_tile_width, y*bg_tile_height))
+
     if leaf == "main_menu" or leaf =="save_game" or leaf=="load_game" or leaf == "options":
         screen.blit(logo, (screen_width/2-logo_width/2, screen_height*0.085))
         screen.blit(icon_main_scaled, (screen_width/2-logo_width/2-icon_main_width, screen_height*0.085))
@@ -873,6 +881,7 @@ while running:
         pygame.draw.rect(screen, (50,50,250), (screen_width/2-625/2-icon_main_width-25, screen_height*0.085+icon_main_height+25,1000,400))
         #screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25
     elif leaf == "new_game":
+        pygame.draw.rect(screen, (50,150,50), (screen_width/2-625/2-icon_main_width-45+75, screen_height*0.085+icon_main_height+25-10,875,400+20))
         screen.blit(new_game_logo_processed, (screen_width/2-new_game_logo_width/2, screen_height*0.085))
         img = processed_images[0][2]
         #w,h = monster_tile_size_max, monster_tile_size_max
