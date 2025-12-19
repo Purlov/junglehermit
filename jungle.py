@@ -17,7 +17,7 @@ random.seed()
 
 pygame.init()
 
-pygame.display.set_caption("Poison Ivy")
+pygame.display.set_caption("Jungle Hermit")
 icon = pygame.image.load("gfx/ivyleaf.png")
 pygame.display.set_icon(icon)
 
@@ -163,6 +163,8 @@ def change_window(name):
             leaf = "main_menu"
         
     if leaf == "main_menu":
+        main_menu_padding = tp.Text("\n"*5)
+
         main_menu_objects = []
         main_menu_objects.append(tp.Button("Continue Game"))
         main_menu_objects[len(main_menu_objects)-1].at_unclick=partial(change_window, "continue")
@@ -188,10 +190,11 @@ def change_window(name):
         main_menu_objects.append(tp.Button("Exit"))
         main_menu_objects[len(main_menu_objects)-1].at_unclick=exit_game
         main_menu_objects[len(main_menu_objects)-1].generate_shadow(fast=True)
-
-        main_group = tp.TitleBox("Poison Ivy Options", main_menu_objects)
+        
+        main_title = tp.TitleBox("Jungle Hermit Options", main_menu_objects)
+        main_title.sort_children(gap=10)
+        main_group = tp.Group((main_menu_padding,main_title),"v")
         # main_group.set_size((500,500))
-        main_group.sort_children(gap=20)
         main_group.center_on(screen)
     elif leaf == "save_game":
         save_group_left = []
@@ -502,7 +505,7 @@ def move_options_text(direction):
     
     license_text = "\n".join(license_text_spliced[options_current_h:options_current_h+14])
     licenses_area.set_text(license_text)
-    licenses_area.set_topleft(screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25)
+    licenses_area.set_topleft(screen_width/2-625/2-icon_main_width-25, screen_height*0.085+icon_main_height+25)
 
 def change_character_type():
     if new_type_toggle.get_value() != "":
@@ -691,7 +694,7 @@ Types = {
             "img_med": load_tile("gfx/taurian.png", monster_tile_size_med),
             "img_max": load_tile("gfx/taurian.png", monster_tile_size_max),
             "hp": 100,
-            "description": "Taurians are agile and strong. Their type of fighting is close combat with dual weapons. They don't wear armour but they instead dodge. That's a good style. They come from a lush jungle where they cook magic porridges so they have aptitude for magically enchanted things, and the whole area of Poison Ivy."
+            "description": "Taurians are agile and strong. Their type of fighting is close combat with dual weapons. They don't wear armour but they instead dodge. That's a good style. They come from a lush jungle where they cook magic porridges so they have aptitude for magically enchanted things, and the whole area of ."
         }, 
         "dark elf": {
             "img_min": load_tile("gfx/dark_elf.png", monster_tile_size_min),
@@ -852,7 +855,8 @@ while running:
 
     if leaf == "main_menu" or leaf =="save_game" or leaf=="load_game" or leaf == "options":
         screen.blit(logo, (screen_width/2-logo_width/2, screen_height*0.085))
-        screen.blit(icon_main_scaled, (screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085))
+        screen.blit(icon_main_scaled, (screen_width/2-logo_width/2-icon_main_width, screen_height*0.085))
+        screen.blit(icon_main_scaled, (screen_width/2+logo_width/2-25, screen_height*0.085))
         screen.blit(golden_chest_main_scaled, (screen_width-golden_chest_main_width-10, screen_height-golden_chest_main_height-10))
         screen.blit(dark_elf_main_scaled, (screen_width-golden_chest_main_width-dark_elf_main_width-10-10, screen_height-dark_elf_main_height-10))
         #screen.blit(gladiator_text, (screen_width-gladiator_text_width-10, screen_height-dark_elf_main_height-10-gladiator_text_height))
@@ -865,8 +869,8 @@ while running:
         screen.blit(loading_text, (screen_width/2-loading_text_w/2,0.3*screen_height))
     elif leaf == "options":
         #screen.fill((150,0,0))
-        pygame.draw.rect(screen, (50,150,50), (screen_width/2-logo_width/2-icon_main_width-25-10, screen_height*0.085+icon_main_height+25-10,1000+20,400+20))
-        pygame.draw.rect(screen, (50,50,250), (screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25,1000,400))
+        pygame.draw.rect(screen, (50,150,50), (screen_width/2-625/2-icon_main_width-25-10, screen_height*0.085+icon_main_height+25-10,1000+20,400+20))
+        pygame.draw.rect(screen, (50,50,250), (screen_width/2-625/2-icon_main_width-25, screen_height*0.085+icon_main_height+25,1000,400))
         #screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25
     elif leaf == "new_game":
         screen.blit(new_game_logo_processed, (screen_width/2-new_game_logo_width/2, screen_height*0.085))
