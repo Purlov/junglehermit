@@ -714,9 +714,9 @@ def color_tiles_memory(i):
 
 def load_tile(img, size, size2= 0):
     if size2 != 0:
-        return pygame.transform.scale(pygame.image.load(img), (size, size2))
+        return pygame.transform.scale(pygame.image.load(img), (size, size2)).convert_alpha()
     else:
-        return pygame.transform.scale(pygame.image.load(img), (size,)*2)
+        return pygame.transform.scale(pygame.image.load(img), (size,)*2).convert_alpha()
 
 def random_bright_nonpurple_color():
     while True:
