@@ -890,7 +890,7 @@ while running:
                     running = False
 
     #screen.fill((150,150,150)) # Clear screen
-    if leaf in ("main_menu", "save_game", "load game", "options", "new_game", "star_sign"):
+    if leaf in ("main_menu", "save_game", "load_game", "options", "new_game", "star_sign"):
         for x in range(round(screen_width/bg_tile_width)):
             for y in range(round(screen_height/bg_tile_height)):
                 screen.blit(bg_tile, (x*bg_tile_width, y*bg_tile_height))
