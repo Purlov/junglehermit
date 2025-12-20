@@ -258,7 +258,9 @@ def change_window(name):
 
         #global licenses_area
         global licenses_area#, licenses_box
-        licenses_area = tp.Text(LICENSES, font_size=24, max_width=950, font_color=(250,250,250))
+        licenses_area = tp.Text(LICENSES, max_width=950, font_color=(250,250,250))
+        licenses_area.set_font_name("century")
+        licenses_area.set_font_size(18)
         #licenses_box = tp.Box([licenses_area], size_limit=(1000,600))
         #licenses_box.at_drag = splice_license
 
@@ -502,11 +504,11 @@ def move_options_text(direction):
     license_text_spliced = LICENSES.splitlines(False)
     global licenses_area, options_current_h
     if direction == "down":
-        options_current_h = min(len(license_text_spliced)-14, options_current_h + 3)
+        options_current_h = min(len(license_text_spliced)-17, options_current_h + 3)
     elif direction == "up":
         options_current_h = max(0,options_current_h - 3)
     
-    license_text = "\n".join(license_text_spliced[options_current_h:options_current_h+14])
+    license_text = "\n".join(license_text_spliced[options_current_h:options_current_h+17])
     licenses_area.set_text(license_text)
     licenses_area.set_topleft(screen_width/2-625/2-icon_main_width-25, screen_height*0.085+icon_main_height+25)
 
