@@ -877,7 +877,7 @@ while running:
     elif leaf == "options":
         #screen.fill((150,0,0))
         pygame.draw.rect(screen, (50,150,50), (screen_width/2-625/2-icon_main_width-25-10, screen_height*0.085+icon_main_height+25-10,1000+20,400+20))
-        pygame.draw.rect(screen, (50,50,250), (screen_width/2-625/2-icon_main_width-25, screen_height*0.085+icon_main_height+25,1000,400))
+        pygame.draw.rect(screen, (150,150,33), (screen_width/2-625/2-icon_main_width-25, screen_height*0.085+icon_main_height+25,1000,400))
         #screen_width/2-logo_width/2-icon_main_width-25, screen_height*0.085+icon_main_height+25
     elif leaf == "new_game":
         pygame.draw.rect(screen, (150,75,0), (screen_width/2-625/2-icon_main_width-45+75-10, screen_height*0.085+icon_main_height+25-10-10,875+20,400+20+20))
